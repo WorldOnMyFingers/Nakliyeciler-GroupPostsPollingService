@@ -24,7 +24,7 @@ public class Worker : BackgroundService
             var request = new RestRequest();
             var response = client.Execute(request);
             var data = JsonSerializer.Deserialize<FacebookGroupPostsDataModel>(json: response.Content);
-            await Task.Delay(60 * 1000, stoppingToken);
+            await Task.Delay(1000, stoppingToken);
         }
     }
 }
