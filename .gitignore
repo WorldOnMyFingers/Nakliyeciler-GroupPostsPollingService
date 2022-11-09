@@ -4,6 +4,7 @@
 
 /GroupPostsPollingService/.vs/GroupPostsPollingService
 /GroupPostsPollingService/GroupPostsPollingService/obj
+/GroupPostsPollingService/GroupPostsPollingService/bin
 *.exe
 /bin
 /obj
