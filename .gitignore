@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/GroupPostsPollingService/.vs/GroupPostsPollingService
+/GroupPostsPollingService/GroupPostsPollingService/obj
+*.exe
+/bin
+/obj
+/packages
+obj
+bin
+packages
