@@ -7,5 +7,6 @@ namespace GroupPostsPollingService.Models
         public string? updated_time { get; set; }
         public string? message { get; set; }
         public string? story { get; set; }
+        public IEnumerable<string>? tags { get; set; }
     }
 }

@@ -13,5 +13,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="RestSharp" />
+    <None Remove="SwaggerClients\" />
+    <None Remove="SwaggerClients\FbGroupPostsSwagger\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SwaggerClients\" />
+    <Folder Include="SwaggerClients\FbGroupPostsSwagger\" />
   </ItemGroup>
 </Project>
