@@ -3,3 +3,6 @@ GroupPostsPollingService/.vs/GroupPostsPollingService/xs/UserPrefs.xml
 GroupPostsPollingService/.vs/GroupPostsPollingService/xs/project-cache/GroupPostsPollingService.Tests-Debug.json
 GroupPostsPollingService/.vs/GroupPostsPollingService/xs/project-cache/GroupPostsPollingService-Debug.json
 GroupPostsPollingService/.vs/GroupPostsPollingService/xs/project-cache/GroupPostsPollingService.UnitTest-Debug.json
+*.testlog
+GroupPostsPollingService/.vs/GroupPostsPollingService/v17/.suo
+GroupPostsPollingService/.vs/GroupPostsPollingService/v17/TestStore/0/testlog.manifest

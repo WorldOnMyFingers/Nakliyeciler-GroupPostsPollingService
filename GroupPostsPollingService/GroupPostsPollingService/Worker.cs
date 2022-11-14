@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
 using GroupPostsPollingService.Models;
+using GroupPostsPollingService.Utilities;
 using RestSharp;
 
 namespace GroupPostsPollingService;
@@ -25,21 +26,26 @@ public class Worker : BackgroundService
         {
             //oauth/access_token?grant_type=fb_exchange_token&client_id=786802162382083&client_secret=15bde87a5414252eeafa455c072c816d&fb_exchange_token=EAALLl6dltQMBAMmcumnCaZAxYpRdiBhZA2wbn7d3slJj7uxlgY2cUjawwf7Srio5jCc2embWIzGjibKfVTg6iahFsFMhggcTZCXZADMQhHv5gZAbreT8trOqKZBHiYiRZAfWNe2gehr9LLIIRZCdwKGB8jM9035y10uiwiZCY16haZCTKJFcyWd9y3vAZC4wUrQsyY6MlOTvHo2V87F8Ma0PbGZB8evREwYbaO3JQYNWlzkpN84PrkeLyUa3 
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            var accessToken = "EAALLl6dltQMBALKvpPmu7VwvNXwSJr8IbGkDN2jGA0ckGLk5WQzWGZCOjA5MBVESHPp3T9SiO9gkTp96qWZAKxEWdZCNlcvCdRrshL2yiBiTuH98DhgpXkbesQMR8YArTZBcMdoDtFBroa5i3O9bX4kYIpuXvhdnUl2AZAEOVFgZDZD";
+            var accessToken = "EAALLl6dltQMBAJgnZCATfWMhEQWrc5ABwuM1rz3FEmP2P0qEYAduruMQN6PafNRDsgm7dIAZBpwMFvRV5SMY8MVyaO7zj2BZBbYzI3NMvbH2eESlMndMkEZAnZAWAfmC91FUKUPIebZAw0vo61qtEt5AkkPglIj65SeaZBOlDOX7gZDZD";
             var client = new RestClient(string.Format("{0}{1}", "https://graph.facebook.com/1287074015193292/feed?access_token=", accessToken));
 
             var request = new RestRequest();
             var response = client.Execute(request);
-            var listofPosts = JsonSerializer.Deserialize<FacebookGroupPostsDataModel>(json: response.Content).data.ToList();
+
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.Converters.Add(new DateTimeOffsetConverterUsingDateTimeParse());
+            var listofPosts = JsonSerializer.Deserialize<FacebookGroupPostsDataModel>(json: response.Content, options).data.ToList();
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            //var lastRecord = new GroupPost { id = "1287074015193292_1293356261231734" };
-            var lastRecord = await _fbGroupPostsClient.GetAllAsync("1", "UpdatedDate", "Desc", 1);
+            var tags = new List<string>();
+                tags.Add("İSTANBUL");
+ 
+            var lastRecord = await _fbGroupPostsClient.GetAllAsync("1", "UpdatedDate", "Desc", tags, null, 1);
 
-            if (listofPosts[0].id != lastRecord.FirstOrDefault().Id)
+            if (listofPosts[0].id != lastRecord.FirstOrDefault()?.Id)
             {
                 var index = 0;
-                while (listofPosts[index].id != lastRecord.FirstOrDefault().Id)
+                while (listofPosts[index].id != lastRecord.FirstOrDefault()?.Id)
                 {
                     if (listofPosts[index].message != null) listofPosts[index].tags = GetMatchingTags(listofPosts[index].message);
                     index++;
@@ -51,8 +57,9 @@ public class Worker : BackgroundService
                 {
                     Id = x.id,
                     Message = x.message,
-                    UpdatedDate = x.updated_time,
-                    Tags = x.tags.ToList()
+                    UpdatedDate = DateTimeOffset.Parse(x.updated_time),
+                    Tags = x.tags.ToList(),
+                    GroupId = x.id.Split('_')[0]
                 });
                 await _fbGroupPostsClient.FbGroupPostAsync(createGroupPostDtos);
             }
@@ -149,9 +156,12 @@ public class Worker : BackgroundService
         }
     }
 
-    private IEnumerable<ililceModel> GetIlceler()
+    public IEnumerable<ililceModel> GetIlceler()
     {
-        var ilceler = System.IO.File.ReadAllText("/Users/emrebabayigit/Downloads/il-ilceJson.json");
+        string currentDirectory = Directory.GetParent(Environment.CurrentDirectory).FullName;
+        var filePath = Path.Combine(currentDirectory, "il-ilceJson.txt");
+        var ilcelerr = File.ReadAllText(@"C:\Users\babay\source\repos\Nakliyeciler-GroupPostsPollingService\GroupPostsPollingService\il-ilceJson.txt");
+        var ilceler = File.ReadAllText(filePath);
         var data = JsonSerializer.Deserialize<IEnumerable<ililceModel>>(json: ilceler);
         return data;
     }

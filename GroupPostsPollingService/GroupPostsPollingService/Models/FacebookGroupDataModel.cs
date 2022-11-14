@@ -3,7 +3,7 @@ namespace GroupPostsPollingService.Models
 {
     public class FacebookGroupPostsDataModel
     {
-        public IEnumerable<GroupPost>? data { get; set; }
+        public IEnumerable<GroupPost> data { get; set; }
     }
 }
 

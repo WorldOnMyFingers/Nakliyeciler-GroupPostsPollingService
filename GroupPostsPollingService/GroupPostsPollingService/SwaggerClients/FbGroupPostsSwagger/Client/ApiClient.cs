@@ -22,12 +22,12 @@ namespace GroupPostsPollingService
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, int? limit);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, System.Collections.Generic.IEnumerable<string> tags, System.DateTimeOffset? since, int? limit);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, int? limit, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, System.Collections.Generic.IEnumerable<string> tags, System.DateTimeOffset? since, int? limit, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -75,15 +75,15 @@ namespace GroupPostsPollingService
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, int? limit)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, System.Collections.Generic.IEnumerable<string> tags, System.DateTimeOffset? since, int? limit)
         {
-            return GetAllAsync(userId, sortBy, sort, limit, System.Threading.CancellationToken.None);
+            return GetAllAsync(userId, sortBy, sort, tags, since, limit, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, int? limit, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupPostDto>> GetAllAsync(string userId, string sortBy, string sort, System.Collections.Generic.IEnumerable<string> tags, System.DateTimeOffset? since, int? limit, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/FbGroupPost/GetAll?");
@@ -98,6 +98,14 @@ namespace GroupPostsPollingService
             if (sort != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("Sort") + "=").Append(System.Uri.EscapeDataString(ConvertToString(sort, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (tags != null)
+            {
+                foreach (var item_ in tags) { urlBuilder_.Append(System.Uri.EscapeDataString("Tags") + "=").Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append("&"); }
+            }
+            if (since != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("Since") + "=").Append(System.Uri.EscapeDataString(since.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (limit != null)
             {
@@ -359,7 +367,12 @@ namespace GroupPostsPollingService
         [System.Text.Json.Serialization.JsonPropertyName("updatedDate")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public string UpdatedDate { get; set; }
+        public System.DateTimeOffset UpdatedDate { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string GroupId { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("tags")]
 
@@ -394,15 +407,20 @@ namespace GroupPostsPollingService
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
         public string Id { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("fbGroupId")]
-
-        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public string FbGroupId { get; set; }
-
         [System.Text.Json.Serialization.JsonPropertyName("message")]
 
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
         public string Message { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string GroupId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public string GroupName { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("updatedDate")]
 

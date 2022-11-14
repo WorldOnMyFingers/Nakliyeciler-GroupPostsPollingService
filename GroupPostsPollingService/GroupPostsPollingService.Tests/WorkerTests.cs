@@ -7,12 +7,14 @@ namespace GroupPostsPollingService.Tests
     public class WorkerTests
     {
         private readonly Mock<ILogger<Worker>> _logger;
+        private readonly Mock<IFbGroupPostsClient> _fbGroupPostsClient;
         private Worker _worker;
 
         public WorkerTests()
         {
             _logger = new Mock<ILogger<Worker>>();
-            _worker = new Worker(_logger.Object);
+            _fbGroupPostsClient = new Mock<IFbGroupPostsClient>();
+            _worker = new Worker(_logger.Object, _fbGroupPostsClient.Object);
         }
 
         [Fact]
@@ -55,6 +57,19 @@ namespace GroupPostsPollingService.Tests
 
             //assert
             Assert.Equal('i', result);
+        }
+
+        [Fact]
+        public void GetIlcelerTest()
+        {
+            //arrange
+            
+
+            //act
+            var result = _worker.GetIlceler();
+
+            //assert
+            
         }
     }
 }
